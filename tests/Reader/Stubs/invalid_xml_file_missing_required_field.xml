@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <payment_methods>
+        <creditcard>
+            <secret>secret</secret>
+            <base_url>https://api-test.wirecard.com</base_url>
+            <http_user>user</http_user>
+            <http_pass>password</http_pass>
+            <wpp_url>https://wpp-test.wirecard.com</wpp_url>
+            <three_d_merchant_account_id>three_d_merchant_account_id</three_d_merchant_account_id>
+            <three_d_secret>three_d_secret</three_d_secret>
+        </creditcard>
+    </payment_methods>
+</config>

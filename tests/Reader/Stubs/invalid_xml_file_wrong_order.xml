@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <payment_methods>
+        <paypal name="PayPal">
+            <secret>secret</secret>
+            <merchant_account_id>merchant_account_id</merchant_account_id>
+            <base_url>https://api-test.wirecard.com</base_url>
+            <http_user>user</http_user>
+            <http_pass>password</http_pass>
+        </paypal>
+    </payment_methods>
+</config>

@@ -15,6 +15,7 @@ require_once $basePath . "/vendor/autoload.php";
 $credentialFilePath = dirname(__FILE__) . DIRECTORY_SEPARATOR . "default_credentials.xml";
 try {
     $module = new Wirecard\Credentials\Credentials($credentialFilePath);
+    $module->validateSource($credentialFilePath);
 } catch (\Exception $e) {
     print_r($e->getMessage() . PHP_EOL);
     exit(0);
@@ -26,7 +27,7 @@ try {
     );
     $config = $module->getConfigByPaymentMethod($paymentMethod);
     print_r($config->getBaseUrl() . PHP_EOL);
-    print_r($config->getMerchantAccountId(). PHP_EOL);
+    print_r($config->getMerchantAccountId() . PHP_EOL);
 } catch (\Exception $ex) {
     print_r($ex->getMessage() . PHP_EOL);
     exit(0);
@@ -35,7 +36,7 @@ try {
 try {
     foreach ($module->getConfig() as $paymentMethod => $config) {
         print_r($paymentMethod . ":" . $config->getBaseUrl() . PHP_EOL);
-        print_r($paymentMethod . ":" . $config->getMerchantAccountId(). PHP_EOL);
+        print_r($paymentMethod . ":" . $config->getMerchantAccountId() . PHP_EOL);
     }
 } catch (\Exception $e) {
     print_r($e->getMessage() . PHP_EOL);

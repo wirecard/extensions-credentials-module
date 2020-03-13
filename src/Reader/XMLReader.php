@@ -11,7 +11,6 @@ namespace Wirecard\Credentials\Reader;
 
 use Wirecard\Credentials\PaymentMethodRegistry;
 use Wirecard\Credentials\Exception\InvalidXMLFormatException;
-use Exception;
 use DOMDocument;
 use DOMXPath;
 
@@ -25,53 +24,21 @@ class XMLReader implements ReaderInterface
     /**
      * @var string
      */
-    const XML_SCHEMA_FILE_NAME = "schema.xsd";
-
-    /**
-     * @var string
-     */
     private $rawXML;
 
     /**
      * XMLReader constructor.
-     * @param string $data
+     * @param string $filePath
      * @throws InvalidXMLFormatException
      * @since 1.0.0
      */
-    public function __construct($data)
+    public function __construct($filePath)
     {
-        $this->rawXML = $data;
-        try {
-            if (!$this->validate()) {
-                throw new InvalidXMLFormatException();
-            }
-        } catch (Exception $ex) {
-            throw new InvalidXMLFormatException($ex->getMessage());
-        }
-    }
-
-    /**
-     * @return string
-     * @since 1.0.0
-     */
-    private function getXMLSchemaPath()
-    {
-        return sprintf(
-            "%s/%s",
-            dirname(dirname(__DIR__)),
-            self::XML_SCHEMA_FILE_NAME
-        );
-    }
-
-    /**
-     * Validate XML with XSD schema
-     * @since 1.0.0
-     */
-    private function validate()
-    {
-        $dom = new DOMDocument();
-        $dom->loadXML($this->rawXML);
-        return $dom->schemaValidate($this->getXMLSchemaPath());
+        $xmlFileValidator = new XMLFileValidator();
+        $xmlFileValidator
+            ->setThrowError(true)
+            ->validate($filePath);
+        $this->rawXML = file_get_contents($filePath);
     }
 
 

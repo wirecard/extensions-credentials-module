@@ -24,43 +24,13 @@ use PHPUnit_Framework_MockObject_MockObject;
 class XMLReaderTest extends TestCase
 {
     /**
-     * @return string
-     */
-    private function getSampleXMLRawData()
-    {
-        return '<?xml version="1.0" encoding="utf-8"?>
-                <config>
-                    <payment_methods>
-                         <creditcard name="Credit Card">
-                            <merchant_account_id>merchant_account_id</merchant_account_id>
-                            <secret>secret</secret>
-                            <base_url>https://api-test.wirecard.com</base_url>
-                            <http_user>user</http_user>
-                            <http_pass>password</http_pass>
-                            <wpp_url>https://wpp-test.wirecard.com</wpp_url>
-                            <three_d_merchant_account_id>three_d_merchant_account_id</three_d_merchant_account_id>
-                            <three_d_secret>three_d_secret</three_d_secret>
-                        </creditcard>
-                        <paypal name="PayPal">
-                            <merchant_account_id>merchant_account_id</merchant_account_id>
-                            <secret>secret</secret>
-                            <base_url>https://api-test.wirecard.com</base_url>
-                            <http_user>user</http_user>
-                            <http_pass>password</http_pass>
-                        </paypal>
-                    </payment_methods>
-
-                </config>
-            ';
-    }
-
-    /**
      * @return Generator
      */
     public function plainXMLDataProvider()
     {
+        $mockFilePath = dirname(__FILE__) . '/Stubs';
         yield "sample_xml_raw_data" => [
-            $this->getSampleXMLRawData(),
+            "{$mockFilePath}/valid_xml_file.xml",
             [
                 "creditcard" => [
                     'merchant_account_id' => 'merchant_account_id',
@@ -96,23 +66,5 @@ class XMLReaderTest extends TestCase
         /** @var XMLReader | PHPUnit_Framework_MockObject_MockObject $reader */
         $reader = new XMLReader($data);
         $this->assertEquals($expectedResult, $reader->toArray());
-    }
-
-    /**
-     * @group unit
-     * @small
-     * @covers ::validate
-     * @throws InvalidXMLFormatException
-     */
-    public function testValidate()
-    {
-        $testXMLString = $this->getSampleXMLRawData();
-        new XMLReader($testXMLString);
-        new XMLReader('<?xml version="1.0" encoding="utf-8"?><config><payment_methods></payment_methods></config>');
-        $this->expectException(InvalidXMLFormatException::class);
-        new XMLReader('<?xml version="1.0" encoding="utf-8"?><config><invalid_payment_type>
-                            </invalid_payment_type></config>');
-        $this->expectException(InvalidXMLFormatException::class);
-        new XMLReader('<?xml version="1.0" encoding="utf-8"?><configs></configs>');
     }
 }

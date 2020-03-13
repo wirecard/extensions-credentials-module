@@ -14,6 +14,7 @@ use Wirecard\Credentials\Config\CredentialsConfigInterface;
 use Wirecard\Credentials\Config\CredentialsContainer;
 use Wirecard\Credentials\Config\CredentialsCreditCardConfig;
 use Wirecard\Credentials\Exception\InvalidPaymentMethodException;
+use Wirecard\Credentials\Reader\XMLFileValidator;
 use Wirecard\Credentials\Reader\XMLReader;
 use RuntimeException;
 
@@ -42,12 +43,7 @@ class Credentials
      */
     public function __construct($credentialsFilePath)
     {
-        if (!is_readable($credentialsFilePath)) {
-            throw new RuntimeException("File is not readable: " . $credentialsFilePath);
-        }
-        $this->reader = new XMLReader(
-            file_get_contents($credentialsFilePath)
-        );
+        $this->reader = new XMLReader($credentialsFilePath);
     }
 
     /**
@@ -81,5 +77,19 @@ class Credentials
             );
         }
         return $this->config;
+    }
+
+    /**
+     * @param string $filePath
+     * @return bool
+     * @throws Exception\InvalidXMLFormatException
+     * @throws RuntimeException
+     */
+    public function validateSource($filePath)
+    {
+        if (!is_readable($filePath)) {
+            throw new RuntimeException("File is not readable: " . $filePath);
+        }
+        return (new XMLFileValidator())->validate($filePath);
     }
 }
